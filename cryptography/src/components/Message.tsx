@@ -10,11 +10,14 @@ async function copyTextToClipboard(text: string) {
 interface MessageProps {
     timeline: gsap.core.Timeline;
     message: string;
+    cle: string;
+    messageChanged: boolean;
     setIsSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const Message: FC<MessageProps> = ({ message, timeline, setIsSubmitted }) => {
+const Message: FC<MessageProps> = ({ message, cle, messageChanged, timeline, setIsSubmitted }) => {
     const msg = useRef<HTMLDivElement>(null)
+    const key = useRef<HTMLDivElement>(null)
     const wrap = useRef<HTMLDivElement>(null)
 
     useLayoutEffect(() => {
@@ -51,7 +54,8 @@ const Message: FC<MessageProps> = ({ message, timeline, setIsSubmitted }) => {
     }
 
     return <div ref={wrap} className="absolute flex flex-col items-center w-fit h-fit top-1/2 left-1/2 -translate-x-2/4 -translate-y-2/4 text-center">
-        <div ref={msg} className="flex w-max justify-center whitespace-pre-wrap overflow-hidden mb-8">
+        {messageChanged ? <p className="text-red-400">Warning: Your message and key has been changed due to the alphabet 26 letters limit.</p> : null}
+        <div ref={msg} className="flex w-max justify-center whitespace-pre-wrap overflow-hidden mb-4">
             {
                 message
                     .trim()
@@ -62,6 +66,17 @@ const Message: FC<MessageProps> = ({ message, timeline, setIsSubmitted }) => {
             }
         </div>
         <button onClick={() => copyTextToClipboard(message)} type="button" className="hover:italic hover:underline">copy message</button>
+        <div ref={key} className="flex w-max justify-center whitespace-pre-wrap overflow-hidden mb-4 mt-8">
+            {
+                cle
+                    .trim()
+                    .split('')
+                    .map((letter, i) => <p key={i} className="text-lg">
+                        {letter}
+                    </p>)
+            }
+        </div>
+        <button onClick={() => copyTextToClipboard(cle)} type="button" className="hover:italic hover:underline">copy key</button>
         <button onClick={handleBack} type="button" className="hover:italic hover:underline">go back</button>
     </div>
 }

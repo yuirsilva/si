@@ -1,7 +1,6 @@
 import handlemsg from "./handlemsg"
 
 export default function decrypt(message: string, key: string) {
-
     const { key: KEY_DOUBLE_VALUES, msg: MESSAGE_LETTERS_NUM, letters } = handlemsg(message, key)
 
     let decryption_sub: Array<number | string> = []
@@ -14,6 +13,6 @@ export default function decrypt(message: string, key: string) {
             LETTER === undefined ? decryption_sub.push(' ') : decryption_sub.push(LETTER)
         }
     }
-
-    return decryption_sub.join('')
+    
+    return { message: decryption_sub.join(''), key, alteredMessage: false }
 }

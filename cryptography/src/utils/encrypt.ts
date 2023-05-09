@@ -4,17 +4,47 @@ export default function encrypt(message: string, key: string) {
 
     const { key: KEY_DOUBLE_VALUES, msg: MESSAGE_LETTERS_NUM, letters } = handlemsg(message, key)
 
+    let altered_message_state = false
     let encryption_add: Array<number | string> = []
 
-    if (KEY_DOUBLE_VALUES) {
+    let crypto_key: Array<number> | string = []
+    let counter = 0
 
+    if (KEY_DOUBLE_VALUES) {
         for (let i = 0; i < MESSAGE_LETTERS_NUM.length; i++) {
             let add = 0
 
-            const ENCRYPT_VALUE = MESSAGE_LETTERS_NUM[i] + KEY_DOUBLE_VALUES[i % KEY_DOUBLE_VALUES.length]
+            const TEMP_VALUE = MESSAGE_LETTERS_NUM[i] + KEY_DOUBLE_VALUES[i % KEY_DOUBLE_VALUES.length]
+
+            let ENCRYPT_VALUE = 0
+
+            if (TEMP_VALUE > 26) {
+                altered_message_state = true
+                if (counter < 5) {
+                    //const TEMP_STR = String(KEY_DOUBLE_VALUES[i % KEY_DOUBLE_VALUES.length] - 1)
+
+                    //crypto_key.push(TEMP_STR.length === 1 ? TEMP_STR.padStart(2, '0') : TEMP_STR)
+                    crypto_key.push(KEY_DOUBLE_VALUES[i % KEY_DOUBLE_VALUES.length] - 1)
+                }
+
+                ENCRYPT_VALUE = 26
+            } else {
+                ENCRYPT_VALUE = TEMP_VALUE
+
+                if (counter < 5) {
+                    //const TEMP_STR = String(KEY_DOUBLE_VALUES[i % KEY_DOUBLE_VALUES.length])
+
+                    //crypto_key.push(TEMP_STR.length === 1 ? TEMP_STR.padStart(2, '0') : TEMP_STR)
+                    crypto_key.push(KEY_DOUBLE_VALUES[i % KEY_DOUBLE_VALUES.length])
+                }
+            }
+            counter++
 
             if (isNaN(ENCRYPT_VALUE)) {
-                add = KEY_DOUBLE_VALUES[i % KEY_DOUBLE_VALUES.length]
+                //add = KEY_DOUBLE_VALUES[i % KEY_DOUBLE_VALUES.length]
+                //console.log(crypto_key[i % crypto_key.length])
+
+                add = crypto_key[i % crypto_key.length]
             } else {
                 add = ENCRYPT_VALUE
             }
@@ -25,5 +55,13 @@ export default function encrypt(message: string, key: string) {
         }
     }
 
-    return encryption_add.join('')
+    return {
+        message: encryption_add.join(''),
+        key: crypto_key.map(item => {
+            let str_item = String(item)
+
+            return str_item.length === 1 ? str_item.padStart(2, '0') : str_item
+        }).join(''),
+        alteredMessage: altered_message_state
+    }
 }

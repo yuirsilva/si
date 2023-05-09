@@ -10,10 +10,9 @@ const Otp: FC<OtpProps> = ({ otp, setOtp }) => {
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
         const newOTP: string[] = [...otp]
-        newOTP[index] = e.target.value.replace(/\D/, '')
+        newOTP[index] = e.target.value.replace(/\D/, '0')
 
         setOtp(newOTP)
-
 
         if (index < inputs.current.length - 1 && e.target.value.length == 2) {
             if (index == 4) { return }
@@ -30,6 +29,7 @@ const Otp: FC<OtpProps> = ({ otp, setOtp }) => {
     return (
         <label className="flex flex-col gap-3 mb-6">
             <span>Key</span>
+            <p className="text-gray-500 text-sm">Enter 2 numbers per input</p>
             <div className="grid grid-cols-5 gap-2 w-full" >
                 {otp.map((_, i) =>
                     <input
@@ -37,6 +37,7 @@ const Otp: FC<OtpProps> = ({ otp, setOtp }) => {
                         key={i}
                         ref={(el) => el ? inputs.current.push(el) : null}
                         maxLength={2}
+                        minLength={2}
                         value={otp[i]}
                         onChange={(e) => handleChange(e, i)}
                         onKeyDown={(e) => handleKeyDown(e, i)}

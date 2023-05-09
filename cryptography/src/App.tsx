@@ -17,6 +17,7 @@ export default function App() {
     const form = useRef<HTMLFormElement>(null)
     const formContainer = useRef<HTMLDivElement>(null)
     const [message, setMessage] = useState('')
+    const [messageChanged, setMessageChanged] = useState(false)
     const [isSubmitted, setIsSubmitted] = useState(false)
 
     const [otp, setOtp] = useState(new Array(5).fill(''))
@@ -47,18 +48,23 @@ export default function App() {
         event.preventDefault()
 
         const { message, operation } = formData
-        if (operation === 'encrypt') {
-            const ENCRYPTED_MESSAGE = encrypt(message, otp.join(''))
 
-            setMessage(ENCRYPTED_MESSAGE)
-            clicked()
+        const tempObj = { decrypt, encrypt }
 
-        } else {
-            const DECRYPTED_MESSAGE = decrypt(message, otp.join(''))
+        const RESULT_MESSAGE = tempObj[operation](message, otp.join(''))
+        console.log(RESULT_MESSAGE)
 
-            setMessage(DECRYPTED_MESSAGE)
-            clicked()
-        }
+        setMessage(RESULT_MESSAGE.message)
+        setMessageChanged(RESULT_MESSAGE.alteredMessage)
+
+        setFormData(prev => {
+            return {
+                ...prev,
+                key: RESULT_MESSAGE.key
+            }
+        })
+
+        clicked()
 
         setIsSubmitted(true)
     }
@@ -76,12 +82,12 @@ export default function App() {
                 <button type="submit" className="rounded-full bg-indigo-600 font-semibold py-2 px-4 mt-6 hover:bg-indigo-800 active:bg-indigo-900">submit</button>
             </form>
 
-            {isSubmitted && <Message setIsSubmitted={setIsSubmitted} timeline={tl} message={message} />}
+            {isSubmitted && <Message setIsSubmitted={setIsSubmitted} timeline={tl} message={message} cle={formData.key} messageChanged={messageChanged} />}
         </div>
         <div id="indigo">
             <Canvas
                 camera={{
-                    fov: 30
+                    fov: 70
                 }}
             >
                 <Experience />
