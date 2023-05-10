@@ -21,10 +21,7 @@ export default function encrypt(message: string, key: string) {
             if (TEMP_VALUE > 26) {
                 altered_message_state = true
                 if (counter < 5) {
-                    //const TEMP_STR = String(KEY_DOUBLE_VALUES[i % KEY_DOUBLE_VALUES.length] - 1)
-
-                    //crypto_key.push(TEMP_STR.length === 1 ? TEMP_STR.padStart(2, '0') : TEMP_STR)
-                    crypto_key.push(KEY_DOUBLE_VALUES[i % KEY_DOUBLE_VALUES.length] - 1)
+                    crypto_key.push(26 - MESSAGE_LETTERS_NUM[i])
                 }
 
                 ENCRYPT_VALUE = 26
@@ -32,18 +29,12 @@ export default function encrypt(message: string, key: string) {
                 ENCRYPT_VALUE = TEMP_VALUE
 
                 if (counter < 5) {
-                    //const TEMP_STR = String(KEY_DOUBLE_VALUES[i % KEY_DOUBLE_VALUES.length])
-
-                    //crypto_key.push(TEMP_STR.length === 1 ? TEMP_STR.padStart(2, '0') : TEMP_STR)
                     crypto_key.push(KEY_DOUBLE_VALUES[i % KEY_DOUBLE_VALUES.length])
                 }
             }
             counter++
 
             if (isNaN(ENCRYPT_VALUE)) {
-                //add = KEY_DOUBLE_VALUES[i % KEY_DOUBLE_VALUES.length]
-                //console.log(crypto_key[i % crypto_key.length])
-
                 add = crypto_key[i % crypto_key.length]
             } else {
                 add = ENCRYPT_VALUE

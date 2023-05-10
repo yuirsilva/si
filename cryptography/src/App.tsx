@@ -52,7 +52,6 @@ export default function App() {
         const tempObj = { decrypt, encrypt }
 
         const RESULT_MESSAGE = tempObj[operation](message, otp.join(''))
-        console.log(RESULT_MESSAGE)
 
         setMessage(RESULT_MESSAGE.message)
         setMessageChanged(RESULT_MESSAGE.alteredMessage)
