@@ -14,18 +14,14 @@ export default function encrypt(message: string, key: string) {
 
             const TEMP_VALUE = MESSAGE_LETTERS_NUM[i] + KEY_DOUBLE_VALUES[i % KEY_DOUBLE_VALUES.length]
 
-            let ENCRYPT_VALUE = 0
+            let ENCRYPT_VALUE = TEMP_VALUE > 26 ? 26 : TEMP_VALUE
 
             if (TEMP_VALUE > 26) {
                 altered_message_state = true
                 if (i < 5) {
                     crypto_key.push(26 - MESSAGE_LETTERS_NUM[i])
                 }
-
-                ENCRYPT_VALUE = 26
             } else {
-                ENCRYPT_VALUE = TEMP_VALUE
-
                 if (i < 5) {
                     crypto_key.push(KEY_DOUBLE_VALUES[i % KEY_DOUBLE_VALUES.length])
                 }
