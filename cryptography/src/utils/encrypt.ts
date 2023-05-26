@@ -1,14 +1,12 @@
 import handlemsg from "./handlemsg"
 
 export default function encrypt(message: string, key: string) {
-
     const { key: KEY_DOUBLE_VALUES, msg: MESSAGE_LETTERS_NUM, letters } = handlemsg(message, key)
 
     let altered_message_state = false
     let encryption_add: Array<number | string> = []
 
     let crypto_key: Array<number> | string = []
-    let counter = 0
 
     if (KEY_DOUBLE_VALUES) {
         for (let i = 0; i < MESSAGE_LETTERS_NUM.length; i++) {
@@ -20,7 +18,7 @@ export default function encrypt(message: string, key: string) {
 
             if (TEMP_VALUE > 26) {
                 altered_message_state = true
-                if (counter < 5) {
+                if (i < 5) {
                     crypto_key.push(26 - MESSAGE_LETTERS_NUM[i])
                 }
 
@@ -28,11 +26,10 @@ export default function encrypt(message: string, key: string) {
             } else {
                 ENCRYPT_VALUE = TEMP_VALUE
 
-                if (counter < 5) {
+                if (i < 5) {
                     crypto_key.push(KEY_DOUBLE_VALUES[i % KEY_DOUBLE_VALUES.length])
                 }
             }
-            counter++
 
             if (isNaN(ENCRYPT_VALUE)) {
                 add = crypto_key[i % crypto_key.length]
